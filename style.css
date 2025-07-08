@@ -1,10 +1,8 @@
-/* style.css */
-
 /* General reset and base layout */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: url('background.jpg') no-repeat center center fixed;
+  background: url('background.avif') no-repeat center center fixed;
   background-size: cover;
   background-color: #f0f0f0; /* fallback background */
   color: #333;
