@@ -1,5 +1,5 @@
 # Swach_Shala_HackOrbit
-# 🧼 AI-Powered Hygiene Monitoring System for Schools
+# 🧼 AI-Powered Hygiene Monitoring System 
 
 **HackOrbit 2025 – Team Tech Titans**
 
