@@ -101,9 +101,10 @@ pip install -r requirements.txt
 
 
 ### 🚀 Run the Project
+```
 bash 
 python app.py
-
+```
 
 ### 📌 Access your app at
 bash
