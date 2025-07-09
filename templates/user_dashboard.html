@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Sanitation Classifier</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 30px; background: #f0f0f0; }
+        h1 { color: #333; }
+        form { margin: 20px; }
+        img { margin-top: 20px; max-width: 400px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+        .result { margin-top: 20px; font-size: 20px; }
+        .prob { color: #555; }
+    </style>
+</head>
+<body>
+    <h1>AI-Powered Hygiene Issue Detector</h1>
+
+    <form action="{{ url_for('predict') }}" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept="image/*" required>
+        <button type="submit">Upload & Predict</button>
+    </form>
+
+    {% if image_path %}
+        <img src="{{ image_path }}" alt="Uploaded Image">
+        <div class="result">
+            <strong>Prediction:</strong> {{ prediction }} <br>
+            <span class="prob"><strong>Confidence:</strong> {{ probability }}</span>
+        </div>
+    {% endif %}
+</body>
+</html>
