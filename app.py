@@ -9,7 +9,7 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 app.config['UPLOAD_FOLDER'] = 'static/uploads/'
 
-model = load_model('model/hackorbitmodel.keras')
+model = load_model('model/hackrbitmodel.keras')
 classification_names = ["DirtyFloor", "OverflowingDustbins", "TrashPresence", "WaterLeaks"]
 input_shape = (224, 224, 3)
 
