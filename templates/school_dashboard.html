@@ -4,76 +4,117 @@
   <meta charset="UTF-8">
   <title>School Dashboard | Swachh Shala</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="icon" href="../static/uploads/logo.jpg">
+  <link rel="icon" href="/static/uploads/logo.jpg">
+  <style>
+    body {
+      background: url('/static/uploads/school_dashboard_background.jpg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Inter', sans-serif;
+    }
+    .fade-in {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
 </head>
-<body class="flex h-screen bg-gray-100">
 
-  <!-- Sidebar -->
-  <div class="w-1/4 bg-gray-900 text-white p-6 flex flex-col items-center">
-    <img src="../static/uploads/admin_photo.jpg" class="w-32 h-32 rounded-full mb-4" alt="School Logo">
-    <h2 class="text-xl font-bold text-center">{{ session['institution_name'] }}</h2>
-    <p class="text-sm mt-1 text-center break-words">{{ session['email'] }}</p>
-    <a href="/logout" class="mt-6 bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded">Logout</a>
-  </div>
+<body class="h-screen flex flex-col text-white overflow-hidden">
 
-  <!-- Main Content Area -->
-  <div class="w-3/4 flex flex-col p-6 space-y-6 overflow-auto">
-
-    <!-- Upload Form -->
-    <div class="bg-white rounded-lg shadow p-6">
-      <h2 class="text-2xl font-bold mb-4">Upload New Maintenance Image</h2>
-      <form method="POST" action="/predict" enctype="multipart/form-data" class="mb-6">
-        <input type="file" name="file" required class="mb-4 border p-3 rounded w-full border-gray-300">
-        <button type="submit" class="bg-green-600 hover:bg-green-500 text-white font-semibold px-6 py-2 rounded shadow">Upload & Predict</button>
-      </form>
-
-      {% if message %}
-        <p class="mt-2 text-red-600 font-semibold">{{ message }}</p>
-      {% endif %}
-
-      {% if prediction %}
-        <div class="mt-6 p-4 bg-gray-50 border border-gray-300 rounded">
-          <p class="text-lg font-semibold text-gray-800">Prediction: {{ prediction }}</p>
-          <p class="text-lg text-gray-700">Probability: {{ probability }}</p>
-          <img src="/{{ image_path }}" alt="Prediction Image" class="w-64 h-40 object-cover mt-3 rounded">
-        </div>
-      {% endif %}
-    </div>
-
-    <!-- Past Complaints -->
-    <div class="bg-white rounded-lg shadow p-6">
-      <h2 class="text-2xl font-bold mb-4">Past Complaints</h2>
-      <div class="overflow-x-auto">
-        <table class="min-w-full border border-gray-300 rounded">
-          <thead>
-            <tr class="bg-gray-100 text-gray-800">
-              <th class="border border-gray-300 px-4 py-3">Image</th>
-              <th class="border border-gray-300 px-4 py-3">Issue</th>
-              <th class="border border-gray-300 px-4 py-3">Probability</th>
-              <th class="border border-gray-300 px-4 py-3">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for complaint in complaints %}
-            <tr class="hover:bg-gray-50">
-              <td class="border border-gray-300 p-2">
-                <img src="/{{ complaint.image_path }}" alt="Issue Image" class="w-24 h-16 object-cover rounded">
-              </td>
-              <td class="border border-gray-300 p-2 font-semibold text-gray-800">{{ complaint.predicted_class }}</td>
-              <td class="border border-gray-300 p-2 text-gray-700">{{ complaint.probability }}%</td>
-              <td class="border border-gray-300 p-2 text-sm font-medium text-gray-600">{{ complaint.status }}</td>
-            </tr>
-            {% else %}
-            <tr>
-              <td colspan="4" class="border p-4 text-center text-gray-500">No complaints made yet.</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+  <!-- Navbar -->
+  <nav class="w-full flex items-center justify-between p-4 bg-black bg-opacity-70 shadow-lg">
+    <div class="flex items-center gap-3">
+      <img src="/static/uploads/logo.jpg" alt="Logo" class="w-12 h-12 rounded">
+      <div>
+        <h1 class="text-3xl font-bold tracking-wide">Swachh Shala</h1>
+        <p class="text-xs italic text-gray-300">"Clean Schools, Bright Futures."</p>
       </div>
     </div>
+    <a href="/logout" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded shadow">Logout</a>
+  </nav>
 
+  <!-- Main Body Layout -->
+  <div class="flex flex-1 overflow-hidden">
+
+    <!-- Sidebar -->
+    <div class="w-1/4 bg-gray-900 bg-opacity-95 text-white p-6 flex flex-col items-center shadow-xl">
+      <img src="/static/uploads/school_photo.jpeg" class="w-32 h-32 rounded-full mb-4 border-4 border-white shadow" alt="School Logo">
+      <h2 class="text-2xl font-bold text-center mb-1">{{ session['institution_name'] }}</h2>
+      <p class="text-sm text-center break-words">{{ session['email'] }}</p>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="w-3/4 flex flex-col p-6 space-y-6 overflow-y-auto">
+
+      <!-- Upload Form -->
+      <div class="bg-white bg-opacity-90 rounded-lg shadow p-6 fade-in text-gray-800">
+        <h2 class="text-3xl font-bold mb-4">Upload Maintenance Image</h2>
+        <form method="POST" action="/predict" enctype="multipart/form-data" class="mb-6">
+          <input type="file" name="file" required class="mb-4 border p-3 rounded w-full border-gray-300">
+          <button type="submit" class="bg-green-600 hover:bg-green-500 text-white font-semibold px-6 py-2 rounded shadow">Upload & Predict</button>
+        </form>
+
+        {% if message %}
+          <p class="mt-2 text-red-600 font-semibold">{{ message }}</p>
+        {% endif %}
+
+        {% if prediction %}
+          <div class="mt-6 p-4 bg-gray-100 border border-gray-300 rounded">
+            <p class="text-xl font-semibold">Prediction: {{ prediction }}</p>
+            <p class="text-lg">Probability: {{ probability }}</p>
+            <img src="/{{ image_path }}" alt="Prediction Image" class="w-64 h-40 object-cover mt-3 rounded">
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Past Complaints -->
+      <div class="bg-white bg-opacity-90 rounded-lg shadow p-6 fade-in text-gray-800">
+        <h2 class="text-3xl font-bold mb-4">Past Complaints</h2>
+        <div class="overflow-x-auto">
+          <table class="min-w-full border border-gray-300 rounded">
+            <thead>
+              <tr class="bg-gray-100">
+                <th class="border border-gray-300 px-4 py-3">Image</th>
+                <th class="border border-gray-300 px-4 py-3">Issue</th>
+                <th class="border border-gray-300 px-4 py-3">Probability</th>
+                <th class="border border-gray-300 px-4 py-3">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for complaint in complaints %}
+              <tr class="hover:bg-gray-50">
+                <td class="border border-gray-300 p-2">
+                  <img src="/{{ complaint.image_path }}" alt="Issue Image" class="w-24 h-16 object-cover rounded">
+                </td>
+                <td class="border border-gray-300 p-2 font-semibold">{{ complaint.predicted_class }}</td>
+                <td class="border border-gray-300 p-2">{{ complaint.probability }}%</td>
+                <td class="border border-gray-300 p-2 text-sm font-medium">{{ complaint.status }}</td>
+              </tr>
+              {% else %}
+              <tr>
+                <td colspan="4" class="border p-4 text-center text-gray-500">No complaints made yet.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
   </div>
+
+  <!-- Simple fade-in animation -->
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll(".fade-in").forEach(el => {
+        setTimeout(() => el.classList.add("visible"), 200);
+      });
+    });
+  </script>
 
 </body>
 </html>

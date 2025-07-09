@@ -87,19 +87,19 @@
     <div class="info"><strong>Probability:</strong> {{ complaint.probability }}%</div>
     <img src="{{ complaint.image_path }}" class="image">
 
-    {% if complaint.predicted_class == 'DirtyFloor' %}
+    {% if complaint.predicted_class == 'Dirty Floor' %}
       <div class="note">
         <strong>Cause:</strong> Inadequate cleaning and irregular floor maintenance.<br>
         <strong>Impact:</strong> Increases bacterial/fungal infection risk and poor hygiene perception.<br>
         <strong>Action:</strong> Immediate cleaning and scheduled sanitization by sanitation staff.
       </div>
-    {% elif complaint.predicted_class == 'OverflowingDustbins' %}
+    {% elif complaint.predicted_class == 'Overflowing Dustbins' %}
       <div class="note">
         <strong>Cause:</strong> Irregular waste collection and monitoring.<br>
         <strong>Impact:</strong> Attracts flies, rodents and spreads odour and infections.<br>
         <strong>Action:</strong> Call municipal waste services and internal staff for prompt removal.
       </div>
-    {% elif complaint.predicted_class == 'TrashPresence' %}
+    {% elif complaint.predicted_class == 'Trash Presence' %}
       <div class="note">
         <strong>Cause:</strong> Lack of disposal points and improper student awareness.<br>
         <strong>Impact:</strong> Mosquito breeding, infections and allergies from accumulated trash.<br>

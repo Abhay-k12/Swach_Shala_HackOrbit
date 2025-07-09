@@ -4,50 +4,71 @@
   <meta charset="UTF-8">
   <title>Admin Dashboard | Swachh Shala</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="icon" href="../static/uploads/logo.jpg">
+  <link rel="icon" href="/static/uploads/logo.jpg">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
 </head>
-<body class="flex h-screen">
-  <!-- Left Vertical Sidebar -->
-  <div class="w-1/4 bg-gray-900 text-white p-6 flex flex-col items-center">
-    <img src="../static/uploads/admin.jpg" class="w-32 h-32 rounded-full mb-4" alt="Admin Photo">
-    <h2 class="text-xl font-bold">{{ session['institution_name'] }}</h2>
-    <p class="text-sm mt-1">{{ session['email'] }}</p>
-    <a href="/logout" class="mt-6 bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded">Logout</a>
-  </div>
 
-  <!-- Main Content Area -->
-  <div class="w-3/4 flex flex-col">
-    <!-- Upper Horizontal Section: Pending Hygiene Complaints Reports -->
-    <div class="flex-1 overflow-auto p-6 bg-gray-50">
-      <h2 class="text-2xl font-bold mb-4">Pending Hygiene Complaints Reports</h2>
+<body class="h-screen flex flex-col overflow-hidden">
 
-      {% for school, complaints in reports.items() %}
-      <div class="border p-4 rounded mb-6 bg-white">
-        <h3 class="text-xl font-semibold text-gray-800 mb-3">School: {{ school }}</h3>
-
-        <div class="grid grid-cols-2 gap-4">
-          {% for complaint in complaints %}
-          <div class="p-3 border rounded bg-gray-50">
-            <img src="/{{ complaint.image_path }}" class="w-64 h-40 object-cover rounded mb-2">
-            <p>Issue: <strong>{{ complaint.predicted_class }}</strong></p>
-            <p>Probability: <strong>{{ complaint.probability }}%</strong></p>
-          </div>
-          {% endfor %}
-        </div>
-        <div class="flex justify-end mt-4">
-          <a href="/generate_report/{{ school }}"class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded">Download Report as PDF</a>
-        </div>
+  <!-- Navbar -->
+  <nav class="w-full flex items-center justify-between p-4 bg-black bg-opacity-70 shadow-lg">
+    <div class="flex items-center gap-3">
+      <img src="/static/uploads/logo.jpg" alt="Logo" class="w-12 h-12 rounded">
+      <div>
+        <h1 class="text-3xl font-bold tracking-wide text-white">Swachh Shala</h1>
+        <p class="text-xs italic text-gray-300">"Clean Institutions, Responsible Governance."</p>
       </div>
-      {% else %}
-      <p>No pending complaints.</p>
-      {% endfor %}
+    </div>
+    <a href="/logout" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded shadow">Logout</a>
+  </nav>
+
+  <div class="flex flex-1 overflow-hidden">
+
+    <!-- Sidebar -->
+    <div class="w-1/4 bg-gray-900 bg-opacity-95 text-white p-6 flex flex-col items-center shadow-xl">
+      <img src="/static/uploads/admin_photo.jpg" class="w-32 h-32 rounded-full mb-4 border-4 border-white shadow" alt="Admin Photo">
+      <h2 class="text-2xl font-bold text-center mb-1">{{ session['institution_name'] }}</h2>
+      <p class="text-sm text-center break-words">{{ session['email'] }}</p>
     </div>
 
+    <!-- Main Content Area -->
+    <div class="w-3/4 flex flex-col p-6 space-y-6 overflow-y-auto" style="background: url('/static/uploads/admin_dashboard_background.jpg') no-repeat center center fixed; background-size: cover;">
 
-    <!-- Lower Horizontal Section: School Registration Requests -->
-    <div class="flex-1 overflow-auto p-6 bg-gray-200">
-      <h2 class="text-2xl font-bold mb-4">New School Registration Requests</h2>
-      {% for req in requests %}
+      <!-- Complaints Section -->
+      <div class="bg-white bg-opacity-90 rounded-lg shadow p-6">
+        <h2 class="text-3xl font-bold text-gray-800 mb-4">Pending Hygiene Complaints Reports</h2>
+
+        {% for school, complaints in reports.items() %}
+        <div class="border border-gray-300 p-4 rounded mb-6 bg-gray-50">
+          <h3 class="text-xl font-semibold text-gray-800 mb-3">School: {{ school }}</h3>
+
+          <div class="grid grid-cols-2 gap-4">
+            {% for complaint in complaints %}
+            <div class="p-3 border rounded bg-white">
+              <img src="/{{ complaint.image_path }}" class="w-64 h-40 object-cover rounded mb-2">
+              <p>Issue: <strong>{{ complaint.predicted_class }}</strong></p>
+              <p>Probability: <strong>{{ complaint.probability }}%</strong></p>
+            </div>
+            {% endfor %}
+          </div>
+
+          <div class="flex justify-end mt-4">
+            <a href="/generate_report/{{ school }}" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded">Download Report as PDF</a>
+          </div>
+        </div>
+        {% else %}
+        <p class="text-white">No pending complaints.</p>
+        {% endfor %}
+      </div>
+
+      <!-- Registration Requests Section -->
+      <div class="bg-white bg-opacity-90 rounded-lg shadow p-6">
+        <h2 class="text-3xl font-bold text-gray-800 mb-4">New School Registration Requests</h2>
+        {% for req in requests %}
         <div class="border p-4 rounded mb-4 bg-white flex justify-between items-center">
           <div>
             <h3 class="font-semibold">{{ req.institution_name }}</h3>
@@ -59,10 +80,13 @@
             <a href="/reject/{{ req.id }}" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded">Reject</a>
           </div>
         </div>
-      {% else %}
-        <p>No pending registration requests.</p>
-      {% endfor %}
+        {% else %}
+        <p class="text-white">No pending registration requests.</p>
+        {% endfor %}
+      </div>
+
     </div>
   </div>
+
 </body>
 </html>
