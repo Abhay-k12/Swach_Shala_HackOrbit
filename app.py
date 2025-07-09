@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, flash, render_template, request, redirect, url_for, session
 from db_config import get_db_connection
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
@@ -17,6 +17,12 @@ input_shape = (224, 224, 3)
 @app.route('/')
 def home():
     return render_template('index.html')
+
+@app.route('/logout')
+def logout():
+    session.clear()  # Clearing all the session data
+    flash('You have been logged out successfully.', 'info')  # showing flash message
+    return redirect(url_for('home'))  # Redirecting to home route
 
 # Registration Request page
 @app.route('/register', methods=['GET', 'POST'])
@@ -149,9 +155,9 @@ def predict():
         predicted_index = np.argmax(predictions, axis=1)[0]
         predicted_class = classification_names[predicted_index]
         predicted_prob = predictions[0][predicted_index] * 100
-
+        
         message = ''
-        if predicted_prob > 75:
+        if predicted_prob > 90:
             conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute("INSERT INTO complaints (user_id, image_path, predicted_class, probability) VALUES (%s, %s, %s, %s)",
@@ -159,7 +165,8 @@ def predict():
             conn.commit()
             conn.close()
         else:
-            message = f"Complaint not significant ({predicted_prob:.2f}%). Can be addressed locally."
+            message = f"Complaint not significant. Can be addressed locally."
+            predicted_class = "Mostly Clean"
 
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
