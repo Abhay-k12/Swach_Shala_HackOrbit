@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Hygiene Report - {{ institution_name }}</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      font-size: 16px;
+      line-height: 1.5;
+      background: #f8f9fa;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .header img {
+      width: 90px;
+      margin-right: 20px;
+    }
+    .header h1 {
+      color: #2e7d32;
+      font-size: 26px;
+      margin: 0;
+    }
+    .meta {
+      margin-top: 6px;
+      font-size: 16px;
+    }
+    h2 {
+      margin-top: 24px;
+      font-size: 20px;
+      color: #444;
+      border-bottom: 2px solid #333;
+      padding-bottom: 5px;
+    }
+    .report-section {
+      border: 1px solid #ccc;
+      padding: 15px;
+      margin-bottom: 16px;
+      background: #ffffff;
+      border-radius: 5px;
+    }
+    .image {
+      width: 280px;
+      height: auto;
+      margin: 8px 0;
+      border-radius: 5px;
+    }
+    .info {
+      font-size: 16px;
+      margin: 5px 0;
+    }
+    .note {
+      background: #f1f1f1;
+      padding: 10px;
+      border-radius: 4px;
+      margin-top: 8px;
+      font-size: 15px;
+    }
+    hr {
+      margin: 12px 0;
+      border: none;
+      border-top: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <img src="static/uploads/logo.jpg">
+    <div>
+      <h1>Swachh Shala | Hygiene Inspection Report</h1>
+      <div class="meta"><strong>Date:</strong> {{ date }}</div>
+      <div class="meta"><strong>Institution:</strong> {{ institution_name }}</div>
+    </div>
+  </div>
+
+  <h2>Summary</h2>
+  <p>This report highlights hygiene issues detected at <strong>{{ institution_name }}</strong> through AI-assisted analysis. Each issue has been classified, evaluated for potential risks, and accompanied by corrective action recommendations.</p>
+
+  {% for complaint in complaints %}
+  <div class="report-section">
+    <h2>Issue: {{ complaint.predicted_class }}</h2>
+    <div class="info"><strong>Probability:</strong> {{ complaint.probability }}%</div>
+    <img src="{{ complaint.image_path }}" class="image">
+
+    {% if complaint.predicted_class == 'DirtyFloor' %}
+      <div class="note">
+        <strong>Cause:</strong> Inadequate cleaning and irregular floor maintenance.<br>
+        <strong>Impact:</strong> Increases bacterial/fungal infection risk and poor hygiene perception.<br>
+        <strong>Action:</strong> Immediate cleaning and scheduled sanitization by sanitation staff.
+      </div>
+    {% elif complaint.predicted_class == 'OverflowingDustbins' %}
+      <div class="note">
+        <strong>Cause:</strong> Irregular waste collection and monitoring.<br>
+        <strong>Impact:</strong> Attracts flies, rodents and spreads odour and infections.<br>
+        <strong>Action:</strong> Call municipal waste services and internal staff for prompt removal.
+      </div>
+    {% elif complaint.predicted_class == 'TrashPresence' %}
+      <div class="note">
+        <strong>Cause:</strong> Lack of disposal points and improper student awareness.<br>
+        <strong>Impact:</strong> Mosquito breeding, infections and allergies from accumulated trash.<br>
+        <strong>Action:</strong> Organize awareness drives and clean-up with housekeeping team.
+      </div>
+    {% elif complaint.predicted_class == 'WaterLeaks' %}
+      <div class="note">
+        <strong>Cause:</strong> Damaged plumbing or taps.<br>
+        <strong>Impact:</strong> Stagnant water promotes mosquitoes and damp walls causing respiratory issues.<br>
+        <strong>Action:</strong> Engage maintenance engineer for repairs and health officer inspection.
+      </div>
+    {% endif %}
+  </div>
+  {% endfor %}
+
+  {% if complaints|length == 0 %}
+  <p>No issues detected for this institution at this time.</p>
+  {% endif %}
+
+</body>
+</html>
