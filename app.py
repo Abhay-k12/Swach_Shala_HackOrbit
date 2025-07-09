@@ -4,14 +4,19 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 import numpy as np
 import os
+from flask import send_file
+from xhtml2pdf import pisa
+from io import BytesIO
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 app.config['UPLOAD_FOLDER'] = 'static/uploads/'
 
 model = load_model('model/hackrbitmodel.keras')
-classification_names = ["DirtyFloor", "OverflowingDustbins", "TrashPresence", "WaterLeaks"]
+classification_names = ["Dirty Floor", "Overflowing Dustbins", "Trash Presence", "WaterLeaks"]
 input_shape = (224, 224, 3)
+
 
 # Home page
 @app.route('/')
@@ -23,6 +28,7 @@ def logout():
     session.clear()  # Clearing all the session data
     flash('You have been logged out successfully.', 'info')  # showing flash message
     return redirect(url_for('home'))  # Redirecting to home route
+
 
 # Registration Request page
 @app.route('/register', methods=['GET', 'POST'])
@@ -41,6 +47,7 @@ def register():
         conn.close()
         return redirect(url_for('home'))
     return render_template('register.html')
+
 
 # Login page (for admin & approved schools)
 @app.route('/login', methods=['GET', 'POST'])
@@ -65,6 +72,7 @@ def login():
             return "Invalid Credentials"
     return render_template('login.html')
 
+
 # Dashboard Routing
 @app.route('/dashboard')
 def dashboard():
@@ -74,6 +82,7 @@ def dashboard():
         return redirect(url_for('admin_dashboard'))
     else:
         return redirect(url_for('school_dashboard'))
+
 
 # School Dashboard
 @app.route('/school')
@@ -88,6 +97,7 @@ def school_dashboard():
     conn.close()
     return render_template('school_dashboard.html', complaints=complaints)
 
+
 # Admin Dashboard
 @app.route('/admin')
 def admin_dashboard():
@@ -100,11 +110,27 @@ def admin_dashboard():
     cursor.execute("SELECT * FROM registration_requests WHERE status='Pending'")
     requests_data = cursor.fetchall()
 
-    cursor.execute("SELECT c.*, u.institution_name FROM complaints c JOIN users u ON c.user_id = u.id WHERE c.status='Pending'")
-    complaints = cursor.fetchall()
-
+    # Fetch all pending complaints
+    cursor.execute("""
+        SELECT c.*, u.institution_name 
+        FROM complaints c 
+        JOIN users u ON c.user_id = u.id 
+        WHERE c.status='Pending'
+        ORDER BY u.institution_name
+    """)
+    complaints_data = cursor.fetchall()
     conn.close()
-    return render_template('admin_dashboard.html', requests=requests_data, complaints=complaints)
+
+    # Group complaints by school
+    reports = {}
+    for comp in complaints_data:
+        school = comp['institution_name']
+        if school not in reports:
+            reports[school] = []
+        reports[school].append(comp)
+
+    return render_template('admin_dashboard.html', requests=requests_data, reports=reports)
+
 
 # Approve Registration Request
 @app.route('/approve/<int:request_id>')
@@ -123,6 +149,7 @@ def approve_request(request_id):
     conn.close()
     return redirect(url_for('admin_dashboard'))
 
+
 # Reject Registration Request
 @app.route('/reject/<int:request_id>')
 def reject_request(request_id):
@@ -132,6 +159,7 @@ def reject_request(request_id):
     conn.commit()
     conn.close()
     return redirect(url_for('admin_dashboard'))
+
 
 # Prediction route for schools
 @app.route('/predict', methods=['POST'])
@@ -180,6 +208,39 @@ def predict():
                                image_path=filepath,
                                complaints=complaints,
                                message=message)
+
+
+# report generation 
+@app.route('/generate_report/<institution_name>')
+def generate_report(institution_name):
+    if 'user_id' not in session or session['role'] != 'admin':
+        return redirect(url_for('home'))
+
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("""
+        SELECT c.*, u.institution_name 
+        FROM complaints c 
+        JOIN users u ON c.user_id = u.id 
+        WHERE c.status='Pending' AND u.institution_name=%s
+    """, (institution_name,))
+    complaints = cursor.fetchall()
+    conn.close()
+
+    rendered = render_template('report_template.html',
+                               institution_name=institution_name,
+                               complaints=complaints,
+                               date=datetime.now().strftime("%d-%m-%Y"))
+
+    pdf = BytesIO()
+    pisa_status = pisa.CreatePDF(rendered, dest=pdf)
+    pdf.seek(0)
+
+    if pisa_status.err:
+        return "Error creating PDF report"
+    
+    return send_file(pdf, download_name=f'{institution_name}_Report.pdf', as_attachment=True)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
