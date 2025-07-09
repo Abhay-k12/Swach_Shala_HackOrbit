@@ -6,10 +6,9 @@
 
 ---
 
-
 ## 📖 Project Overview  
 
-🧼 *Swachh Shala* is an AI-powered hygiene inspection and complaint management platform built for *government and public schools. It ensures timely identification of hygiene issues using **image-based AI classification*, automates complaint reporting, and streamlines school registration for state authorities.
+🧼 *Swachh Shala* is an AI-powered hygiene inspection and complaint management platform built for *government and public schools. It ensures timely identification of hygiene issues using **image-based AI classification**, automates complaint reporting, and streamlines school registration for state authorities.
 
 The platform enables:
 - 📸 *AI-based detection* of hygiene irregularities from school-uploaded images  
@@ -83,37 +82,39 @@ The platform enables:
 ✅ Python >= 3.10 (not 3.13+)  
 ✅ MySQL via *XAMPP* (Apache + MySQL running)  
 ✅ Python Packages:
-<br>
+
 #### Execute the following steps
 
-### 📦requirements.txt
-bash
+### 📦 requirements.txt
+```bash
 flask
 tensorflow==2.16.1
 numpy
 Pillow
 xhtml2pdf
 mysql-connector-python
+```
 
-Place the text into requirements.txt and run the command given below.
-bash
+Place the text into `requirements.txt` and run the command given below.
+
+```bash
 pip install -r requirements.txt
-
+```
 
 ### 🚀 Run the Project
-```
-bash 
+```bash
 python app.py
 ```
 
 ### 📌 Access your app at
-bash
+```bash
 http://localhost:5000/
+```
 
 ---
 
 ## 🖥 Project Structure
-bash
+```bash
 project/
 ├── app.py                       # 📌 Main Flask application file (routes, views, AI prediction logic)
 ├── db_config.py                 # 📌 Database connection setup file (MySQL config with XAMPP)
@@ -133,7 +134,7 @@ project/
 │   └── report_template.html     # 📌 Template for report generation, option available at admin dashboard
 │
 └── requirements.txt             # 📌 Python package dependencies needed to run the project
-
+```
 
 ---
 
@@ -212,5 +213,6 @@ Built with ❤ to make schools cleaner, safer, and smarter.
 
 <div align="center">
 
-🔗 [![LinkedIn](https://img.shields.io/badge/Connect%20on-LinkedIn-blue?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/abhay-kanojia-0461a3341)
+🔗 [![LinkedIn](https://img.shields.io/badge/Connect%20on-LinkedIn-blue?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/abhay-kanojia-0461a3341)  
 🔗 [![LinkedIn](https://img.shields.io/badge/Connect%20on-LinkedIn-blue?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/deepali-chauhan-b7881230b?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app)
+</div>
