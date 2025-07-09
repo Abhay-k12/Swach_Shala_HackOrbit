@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard | Swachh Shala</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="../static/uploads/logo.jpg">
+</head>
+<body class="flex h-screen">
+  <!-- Left Vertical Sidebar -->
+  <div class="w-1/4 bg-gray-900 text-white p-6 flex flex-col items-center">
+    <img src="../static/uploads/admin.jpg" class="w-32 h-32 rounded-full mb-4" alt="Admin Photo">
+    <h2 class="text-xl font-bold">{{ session['institution_name'] }}</h2>
+    <p class="text-sm mt-1">{{ session['email'] }}</p>
+    <a href="/logout" class="mt-6 bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded">Logout</a>
+  </div>
+
+  <!-- Main Content Area -->
+  <div class="w-3/4 flex flex-col">
+    <!-- Upper Horizontal Section: Pending Complaints -->
+    <div class="flex-1 overflow-auto p-6 bg-gray-50">
+      <h2 class="text-2xl font-bold mb-4">Pending Hygiene Complaints</h2>
+      {% for complaint in complaints %}
+        <div class="border p-4 rounded mb-4 bg-white">
+          <h3 class="font-semibold">School: {{ complaint.institution_name }}</h3>
+          <img src="/{{ complaint.image_path }}" class="w-64 mt-2 rounded">
+          <p class="mt-2">Classification: <strong>{{ complaint.predicted_class }}</strong></p>
+          <p>Probability: <strong>{{ complaint.probability }}%</strong></p>
+        </div>
+      {% else %}
+        <p>No pending complaints.</p>
+      {% endfor %}
+    </div>
+
+    <!-- Lower Horizontal Section: School Registration Requests -->
+    <div class="flex-1 overflow-auto p-6 bg-gray-200">
+      <h2 class="text-2xl font-bold mb-4">New School Registration Requests</h2>
+      {% for req in requests %}
+        <div class="border p-4 rounded mb-4 bg-white flex justify-between items-center">
+          <div>
+            <h3 class="font-semibold">{{ req.institution_name }}</h3>
+            <p>Email: {{ req.email }}</p>
+            <p>Address: {{ req.address }}</p>
+          </div>
+          <div class="space-x-2">
+            <a href="/approve/{{ req.id }}" class="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded">Approve</a>
+            <a href="/reject/{{ req.id }}" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded">Reject</a>
+          </div>
+        </div>
+      {% else %}
+        <p>No pending registration requests.</p>
+      {% endfor %}
+    </div>
+  </div>
+</body>
+</html>

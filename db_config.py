@@ -4,7 +4,7 @@ def get_db_connection():
     connection = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="",  # XAMPP’s default MySQL password is empty unless you set one
-        database="school_ai_complaints"
+        password="",  # XAMPP default password is empty unless changed
+        database="swachh_shala"
     )
     return connection
