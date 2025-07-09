@@ -205,7 +205,6 @@ project/
 Built with ❤ to make schools cleaner, safer, and smarter.
 
 ---
-
 ## 📞 Help & Contact  
 
 > 💬 *Got a question, suggestion, or need help with Swachh Shala?*  
@@ -213,6 +212,16 @@ Built with ❤ to make schools cleaner, safer, and smarter.
 
 <div align="center">
 
-🔗 [![LinkedIn](https://img.shields.io/badge/Connect%20on-LinkedIn-blue?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/abhay-kanojia-0461a3341)  
-🔗 [![LinkedIn](https://img.shields.io/badge/Connect%20on-LinkedIn-blue?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/deepali-chauhan-b7881230b?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app)
+<b>👤 Abhay Kanojia</b>  
+<a href="https://www.linkedin.com/in/abhay-kanojia-0461a3341">
+  <img src="https://img.shields.io/badge/Connect%20on-LinkedIn-blue?style=for-the-badge&logo=linkedin" alt="LinkedIn - Abhay Kanojia"/>
+</a>  
+
+<br/>
+
+<b>👤 Deepali Chauhan</b>  
+<a href="https://www.linkedin.com/in/deepali-chauhan-b7881230b?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app">
+  <img src="https://img.shields.io/badge/Connect%20on-LinkedIn-blue?style=for-the-badge&logo=linkedin" alt="LinkedIn - Deepali Chauhan"/>
+</a>
+
 </div>
