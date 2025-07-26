@@ -8,7 +8,7 @@
 
 ## 📖 Project Overview  
 
-🧼 *Swachh Shala* is an AI-powered hygiene inspection and complaint management platform built for *government and public schools. It ensures timely identification of hygiene issues using **image-based AI classification**, automates complaint reporting, and streamlines school registration for state authorities.
+🧼 *Swachh Shala* is an AI-powered hygiene inspection and complaint management platform built for government and public schools. It ensures timely identification of hygiene issues using **image-based AI classification**, automates complaint reporting, and streamlines school registration for state authorities.
 
 The platform enables:
 - 📸 *AI-based detection* of hygiene irregularities from school-uploaded images  
